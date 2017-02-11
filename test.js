@@ -27,6 +27,9 @@
             dataType: 'jsonp',
             success: function (data) {
                 callback(data);
+            },
+            error: function (error) {
+                callback(error);
             }
         });
     };
