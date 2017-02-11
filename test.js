@@ -22,18 +22,13 @@
     };
 
     ext.sayHello = function (text, callback) {
-        /*
         $.ajax({
-            url: 'http://api.openweathermap.org/data/2.5/weather?q=' + location + '&units=imperial',
+            url: 'http://localhost:8080/hello/SayHello?name=' + text,
             dataType: 'jsonp',
-            success: function (weather_data) {
-                // Got the data - parse it and return the temperature
-                temperature = weather_data['main']['temp'];
-                callback(temperature);
+            success: function (data) {
+                callback(data);
             }
         });
-        */
-        callback("hello2 " + text);
     };
 
     var descriptor = {
