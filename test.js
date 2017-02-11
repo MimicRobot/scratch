@@ -24,7 +24,7 @@
     ext.sayHello = function (text, callback) {
         $.ajax({
             url: 'http://localhost:8080/hello/SayHello?name=' + text,
-            dataType: 'jsonp',
+            //dataType: 'jsonp',
             success: function (data) {
                 callback(data);
             },
