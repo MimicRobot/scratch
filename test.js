@@ -25,6 +25,7 @@
         $.ajax({
             url: 'http://localhost:8080/hello/SayHello?name=' + text,
             dataType: 'jsonp',
+            timeout : 2000,
             success: function (data) {
                 callback(data);
             },
