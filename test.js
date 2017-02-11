@@ -29,7 +29,7 @@
                 callback(data);
             },
             error: function (error) {
-                callback(error);
+                callback(JSON.stringify(error));
             }
         });
     };
