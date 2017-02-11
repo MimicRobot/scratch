@@ -30,7 +30,7 @@
                 callback(data);
             },
             error: function (error) {
-                callback(JSON.stringify(error));
+                callback("ERROR: scratchTest program isn't running!");
             }
         });
     };
