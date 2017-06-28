@@ -7,6 +7,7 @@
 
 	_self = ext;
 	ext._baseUrl = "http://localhost:8080/mimic/api/";
+	ext._status = { status: 0, msg: "Not connected to robot.  Verify that the scratch module is active within your Mimic software" };
 	
 	ext.send = function (cmd, params, callback) {
 		
@@ -31,7 +32,7 @@
 	};
 
     ext._getStatus = function () {
-        return { status: 2, msg: "Ready" };
+        return _self._status;
     };
 
     ext._shutdown = function () {
@@ -58,6 +59,11 @@
         ],
         url: 'https://mimicrobot.github.io/scratch/'
     };
+	
+	_self.send("Connected").then(function(data){ 
+		if (data)
+			ext._status = { status: 2, msg: "Connected to robot" };
+	});
 
     ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 
