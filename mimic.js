@@ -5,6 +5,7 @@
 
 (function (ext) {
 
+	_self = ext;
 	ext._errorMsg = "ERROR: scratch integration not enabled in Mimic software!";
 	ext._baseUrl = "http://localhost:8080/mimic/api/";
 
@@ -17,14 +18,14 @@
 
     ext.sayHello = function (text, callback) {
         $.ajax({
-            url: "_baseUrl" + "SayHello?name=" + text,
+            url: _self._baseUrl + "SayHello?name=" + text,
             dataType: 'jsonp',
             timeout : 2000,
             success: function (data) {
                 callback(data);
             },
             error: function (error) {
-                callback(_errorMsg);
+                callback(_self._errorMsg);
             }
         });
     };
