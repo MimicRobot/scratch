@@ -7,7 +7,7 @@
 
 	_self = ext;
 	ext._baseUrl = "http://localhost:8080/mimic/api/";
-	ext._status = { status: 0, msg: "Not connected to robot.  Verify that the scratch module is active within your Mimic software" };
+	ext._status = { status: 1, msg: "Not connected to robot.  Verify that the scratch module is active within your Mimic software" };
 	
 	ext.send = function (cmd, params, callback) {
 		
