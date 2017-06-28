@@ -6,33 +6,55 @@
 (function (ext) {
 
 	_self = ext;
-	ext._errorMsg = "ERROR: scratch integration not enabled in Mimic software!";
 	ext._baseUrl = "http://localhost:8080/mimic/api/";
+	
+	ext.send = function (cmd, params, callback) {
+		
+		//generate url
+		var url = _self._baseUrl + cmd
+		if (params != null){
+			var paramStr = "";
+			for (var name in params) {
+				paramStr += name + "=" + params[name] + "&"
+			}
+			if (paramStr.length > 0) {
+				url += "?" + paramStr.substring(0, paramStr.length - 1);
+			}
+		}
+		
+		//send request
+		return $.ajax({
+            url: url,
+            dataType: 'jsonp',
+            timeout : 2000
+        });
+	};
 
     ext._getStatus = function () {
-        return { status: 2, msg: 'Ready' };
+        return { status: 2, msg: "Ready" };
     };
 
     ext._shutdown = function () {
     };
+	
+	ext.ledOn = function() {
+		_self.send("LedOn");
+	};
+	
+	ext.ledOff = function() {
+		_self.send("LedOff");
+	};
 
-    ext.sayHello = function (text, callback) {
-        $.ajax({
-            url: _self._baseUrl + "SayHello?name=" + text,
-            dataType: 'jsonp',
-            timeout : 2000,
-            success: function (data) {
-                callback(data);
-            },
-            error: function (error) {
-                callback(_self._errorMsg);
-            }
-        });
-    };
+    ext.play = function(notes, callback) {
+		_self.send("Play", {Notes: notes}).always(callback);
+	};
 
     var descriptor = {
         blocks: [
-          ['R', 'say hello %s', 'sayHello', 'world']
+		  [' ', 'led on', 'ledOn'],
+		  [' ', 'led off', 'ledOff'],
+          ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
+		  
         ],
         url: 'https://mimicrobot.github.io/scratch/'
     };
