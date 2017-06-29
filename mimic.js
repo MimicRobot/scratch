@@ -95,12 +95,12 @@
 		send("ServosOff");
 	};
 	
-	ext.servoPosition = function(servoID, position) {
-		send("ServoPosition", {ServoID: servoID, Position: position});
+	ext.servoPosition = function(servoName, position) {
+		send("ServoPosition", {ServoName: servoID, Position: position});
 	};
 	
-	ext.servoMove = function(servoID, position, callback) {
-		send("ServoMove", {ServoID: servoID, Position: position}, {timeout:30000}).always(callback);
+	ext.servoMove = function(servoName, position, callback) {
+		send("ServoMove", {ServoName: servoName, Position: position}, {timeout:30000}).always(callback);
 	};
 	
 	ext.servoMoveAll = function(servo1Pos, servo2Pos, servo3Pos, servo4Pos, servo5Pos, callback) {
@@ -115,8 +115,8 @@
 		send("MoveSettings", {Speed: speed, EaseIn: easeIn, EaseOut: easeOut, Sync: sync});
 	};
 	
-	ext.servoOff = function(servoID) {
-		send("ServoOff", {ServoID: servoID});
+	ext.servoOff = function(servoName) {
+		send("ServoOff", {ServoName: servoName});
 	};
 	
 	ext.buttonPressed = function(servoID) {
@@ -142,10 +142,11 @@
 		  ['w', 'playback %m.recordings', 'playback'],
 		  ['w', 'move x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
 		  ['w', 'move shoulder:%n upper arm:%n forearm:%n hand:%n gripper:%n', 'servoMoveAll', 0, 0, 0, 0, 0],
-		  ['w', 'move %m.servoID to position %n', 'servoMove', 'gripper', 0],
+		  ['w', 'move %m.servoName to position %n', 'servoMove', 'gripper', 0],
 		  ['w', 'move settings speed:%n ease in:%n ease out:%n %m.sync', 'moveSettings', 50, 0, 0, 'synchronized'],
+		  [' ', 'position %m.servoName at %n', 'servoPosition', 'gripper', 0],
 		  [' ', 'servos off', 'servosOff'],
-		  [' ', 'servo %m.servoID off', 'servoOff', 'gripper'],
+		  [' ', 'servo %m.servoName off', 'servoOff', 'gripper'],
 		  [' ', 'led on  red:%n green:%n blue:%n', 'ledOn', 255, 255, 255],
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
@@ -153,7 +154,7 @@
 		  ['h', 'when knob turned', 'knobTurned'],
         ],
 		menus: {
-			servoID: ['shoulder', 'upper arm', 'forearm', 'hand', 'gripper'],
+			servoName: ['shoulder', 'upper arm', 'forearm', 'hand', 'gripper'],
 			sync: ['synchronized', 'unsynchronized']
 		},
         url: 'https://mimicrobot.github.io/scratch/'
