@@ -55,8 +55,8 @@
 
     var descriptor = {
         blocks: [
-		  ['w', 'playback %m.recordings', 'ledOn', 255, 0, 0],
-		  [' ', 'led on  red%n green%n blue%n', 'playback'],
+		  ['w', 'playback %m.recordings', 'playback'],
+		  [' ', 'led on  red%n green%n blue%n', 'ledOn', 255, 0, 0],
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
 		  
