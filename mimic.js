@@ -31,7 +31,7 @@
 		}
 		
 		//run again
-		window.setTimeout(function() { listenForEvents(); }, 1000); //every 1 sec
+		window.setTimeout(function() { listenForEvents(); }, 500); //every .5 sec
 	}
 	
 	
@@ -143,8 +143,9 @@
 		  ['w', 'move x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
 		  ['w', 'move shoulder:%n upper arm:%n forearm:%n hand:%n gripper:%n', 'servoMoveAll', 0, 0, 0, 0, 0],
 		  ['w', 'move %m.servoName to position %n', 'servoMove', 'gripper', 0],
-		  ['w', 'move settings speed:%n ease in:%n ease out:%n %m.sync', 'moveSettings', 50, 0, 0, 'synchronized'],
+		  [' ', 'move settings speed:%n ease in:%n ease out:%n %m.sync', 'moveSettings', 50, 0, 0, 'synchronized'],
 		  [' ', 'position %m.servoName at %n', 'servoPosition', 'gripper', 0],
+		  [' ', 'servos stop', 'servosStop'],
 		  [' ', 'servos off', 'servosOff'],
 		  [' ', 'servo %m.servoName off', 'servoOff', 'gripper'],
 		  [' ', 'led on  red:%n green:%n blue:%n', 'ledOn', 255, 255, 255],
