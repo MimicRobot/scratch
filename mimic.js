@@ -83,5 +83,6 @@
 		
 		ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 	});
+	ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 
 })({});
