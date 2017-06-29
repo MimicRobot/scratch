@@ -145,7 +145,7 @@
 		  ['w', 'move %m.servoID to position %n', 'servoMove', 'gripper', 0],
 		  ['w', 'move settings speed:%n ease in:%n ease out:%n %m.sync', 'moveSettings', 50, 0, 0, 'synchronized'],
 		  [' ', 'servos off', 'servosOff'],
-		  [' ', 'servo %m.servoID off', 'servosOff', 'gripper'],
+		  [' ', 'servo %m.servoID off', 'servoOff', 'gripper'],
 		  [' ', 'led on  red:%n green:%n blue:%n', 'ledOn', 255, 255, 255],
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
