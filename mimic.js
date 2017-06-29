@@ -34,7 +34,7 @@
 	};
 
     ext._getStatus = function () {
-        return { status: 2, msg: "Ready" };
+        return { status: 0, msg: "Ready" };
     };
 
     ext._shutdown = function () {
