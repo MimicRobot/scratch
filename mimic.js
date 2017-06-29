@@ -7,7 +7,6 @@
 
 	_self = ext;
 	ext._baseUrl = "http://localhost:8080/mimic/api/";
-	ext._status = { status: 1, msg: "Not connected to robot.  Verify that the scratch module is active within your Mimic software" };
 	
 	ext.send = function (cmd, params, callback) {
 		
@@ -32,14 +31,14 @@
 	};
 
     ext._getStatus = function () {
-        return _self._status;
+        return { status: 2, msg: "Ready" };
     };
 
     ext._shutdown = function () {
     };
 	
-	ext.ledOn = function() {
-		_self.send("LedOn");
+	ext.ledOn = function(red, green, blue) {
+		_self.send("LedOn", {Red:red, Green:green, Blue:blue});
 	};
 	
 	ext.ledOff = function() {
@@ -52,7 +51,7 @@
 
     var descriptor = {
         blocks: [
-		  [' ', 'led on', 'ledOn'],
+		  [' ', 'led on  red$n green$n blue$n', 'ledOn', 255, 0, 0],
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
 		  
@@ -60,11 +59,13 @@
         url: 'https://mimicrobot.github.io/scratch/'
     };
 	
-	_self.send("Connected").then(function(data){ 
-		if (data)
-			ext._status = { status: 2, msg: "Connected to robot" };
+	_self.send("GetRecordings").then(function(data){
+		
+		descriptor.menus = {recordings: data};
+		
+		ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 	});
 
-    ScratchExtensions.register('Mimic robot arm', descriptor, ext);
+    //ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 
 })({});
