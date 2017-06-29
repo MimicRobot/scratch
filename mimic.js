@@ -123,8 +123,6 @@
 		send("MoveWait", {ServoName: servoName}, {timeout:60000}).always(callback);
 	};
 	
-	MoveWait
-	
 	ext.buttonPressed = function(servoID) {
 		_enableButtonPressedEvent = true;
 		if (_isButtonPressed === true){
