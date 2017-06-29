@@ -80,11 +80,11 @@
 	};
 
     ext.play = function(notes, callback) {
-		send("Play", {Notes: notes}).always(callback);
+		send("Play", {Notes: notes}, {timeout:6000}).always(callback);
 	};
 	
-	ext.playback = function(recording, callback) {
-		send("Playback", {Recording: recording}, {timeout : 60000}).always(callback);
+	ext.playback = function(recording) {
+		send("Playback", {Recording: recording});
 	};
 	
 	ext.servosStop = function() {
@@ -99,16 +99,16 @@
 		send("ServoPosition", {ServoName: servoID, Position: position});
 	};
 	
-	ext.servoMove = function(servoName, position, callback) {
-		send("ServoMove", {ServoName: servoName, Position: position}, {timeout:30000}).always(callback);
+	ext.servoMove = function(servoName, position) {
+		send("ServoMove", {ServoName: servoName, Position: position});
 	};
 	
-	ext.servoMoveAll = function(servo1Pos, servo2Pos, servo3Pos, servo4Pos, servo5Pos, callback) {
-		send("ServoMoveAll", {Servo1Pos: servo1Pos, Servo2Pos: servo2Pos, Servo3Pos: servo3Pos, Servo4Pos: servo4Pos, Servo5Pos: servo5Pos}, {timeout:30000}).always(callback);
+	ext.servoMoveAll = function(servo1Pos, servo2Pos, servo3Pos, servo4Pos, servo5Pos) {
+		send("ServoMoveAll", {Servo1Pos: servo1Pos, Servo2Pos: servo2Pos, Servo3Pos: servo3Pos, Servo4Pos: servo4Pos, Servo5Pos: servo5Pos});
 	};
 	
-	ext.servoMoveTarget = function(x, y, z, callback) {
-		send("ServoMoveTarget", {X: x, Y: y, Z: z}, {timeout:30000}).always(callback);
+	ext.servoMoveTarget = function(x, y, z) {
+		send("ServoMoveTarget", {X: x, Y: y, Z: z});
 	};
 	
 	ext.moveSettings = function(speed, easeIn, easeOut, sync) {
@@ -118,6 +118,12 @@
 	ext.servoOff = function(servoName) {
 		send("ServoOff", {ServoName: servoName});
 	};
+	
+	ext.moveWait = function(callback) {
+		send("MoveWait", {ServoName: servoName}, {timeout:60000}).always(callback);
+	};
+	
+	MoveWait
 	
 	ext.buttonPressed = function(servoID) {
 		_enableButtonPressedEvent = true;
@@ -139,10 +145,11 @@
 
     var descriptor = {
         blocks: [
-		  ['w', 'playback %m.recordings', 'playback'],
-		  ['w', 'move x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
-		  ['w', 'move shoulder:%n upper arm:%n forearm:%n hand:%n gripper:%n', 'servoMoveAll', 0, 0, 0, 0, 0],
-		  ['w', 'move %m.servoName to position %n', 'servoMove', 'gripper', 0],
+		  [' ', 'playback %m.recordings', 'playback'],
+		  [' ', 'move x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
+		  [' ', 'move shoulder:%n upper arm:%n forearm:%n hand:%n gripper:%n', 'servoMoveAll', 0, 0, 0, 0, 0],
+		  [' ', 'move %m.servoName to position %n', 'servoMove', 'gripper', 0],
+		  ['w', 'wait until playback or move is done', 'moveWait'],
 		  [' ', 'move settings speed:%n ease in:%n ease out:%n %m.sync', 'moveSettings', 50, 0, 0, 'synchronized'],
 		  [' ', 'position %m.servoName at %n', 'servoPosition', 'gripper', 0],
 		  [' ', 'servos stop', 'servosStop'],
