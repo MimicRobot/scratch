@@ -8,7 +8,7 @@
 	_self = ext;
 	ext._baseUrl = "http://localhost:8080/mimic/api/";
 	
-	ext.send = function (cmd, params, callback) {
+	ext.send = function (cmd, params, ajaxOptions) {
 		
 		//generate url
 		var url = _self._baseUrl + cmd
@@ -23,11 +23,14 @@
 		}
 		
 		//send request
-		return $.ajax({
+		var options = {
             url: url,
             dataType: 'jsonp',
             timeout : 2000
-        });
+        };
+		if (ajaxOptions != null)
+			$.extend(options, ajaxOptions);
+		return $.ajax(options);
 	};
 
     ext._getStatus = function () {
@@ -50,12 +53,22 @@
 	};
 	
 	ext.playback = function(recording, callback) {
-		_self.send("Playback", {Recording: recording}).always(callback);
+		_self.send("Playback", {Recording: recording}, {timeout : 60000}).always(callback);
+	};
+	
+	ext.servosStop = function() {
+		_self.send("ServosStop");
+	};
+	
+	ext.servosOff = function() {
+		_self.send("ServosOff");
 	};
 
     var descriptor = {
         blocks: [
 		  ['w', 'playback %m.recordings', 'playback'],
+		  [' ', 'stop servos', 'servosStop'],
+		  [' ', 'servos off', 'servosOff'],
 		  [' ', 'led on  red%n green%n blue%n', 'ledOn', 255, 0, 0],
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
@@ -70,7 +83,5 @@
 		
 		ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 	});
-
-    //ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 
 })({});
