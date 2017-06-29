@@ -34,8 +34,12 @@
 	};
 
     ext._getStatus = function () {
-        return { status: 0, msg: "Ready" };
+        return { status: 2, msg: "Ready" };
     };
+	
+	ext.failedConnection = function() {
+		return "Verify that the scratch module within the Mimic software is activated and running";
+	};
 
     ext._shutdown = function () {
     };
@@ -78,11 +82,13 @@
     };
 	
 	_self.send("GetRecordings").then(function(data){
-		
+		//success
 		descriptor.menus = {recordings: data};
-		
 		ScratchExtensions.register('Mimic robot arm', descriptor, ext);
+	}, function(){
+		//failed
+		ScratchExtensions.register('Mimic robot arm', {blocks: [['r', 'failed to connect to your robot arm', 'failedConnection']}, ext);
 	});
-	ScratchExtensions.register('Mimic robot arm', descriptor, ext);
+	
 
 })({});
