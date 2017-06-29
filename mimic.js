@@ -120,7 +120,7 @@
 	};
 	
 	ext.moveWait = function(callback) {
-		send("MoveWait", {ServoName: servoName}, {timeout:60000}).always(callback);
+		send("MoveWait", {timeout:60000}).always(callback);
 	};
 	
 	ext.buttonPressed = function(servoID) {
