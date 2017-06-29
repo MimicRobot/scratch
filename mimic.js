@@ -48,10 +48,15 @@
     ext.play = function(notes, callback) {
 		_self.send("Play", {Notes: notes}).always(callback);
 	};
+	
+	ext.playback = function(recording, callback) {
+		_self.send("Playback", {Recording: recording}).always(callback);
+	};
 
     var descriptor = {
         blocks: [
-		  [' ', 'led on  red$n green$n blue$n', 'ledOn', 255, 0, 0],
+		  ['w', 'playback %m.recordings', 'ledOn', 255, 0, 0],
+		  [' ', 'led on  red%n green%n blue%n', 'playback'],
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
 		  
