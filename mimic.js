@@ -115,11 +115,11 @@
 	};
 	
 	ext.servoPosition = function(servoName, position) {
-		send("ServoPosition", {ServoName: getServoID(servoName), Position: position});
+		send("ServoPosition", {ServoID: getServoID(servoName), Position: position});
 	};
 	
 	ext.servoMove = function(servoName, position) {
-		send("ServoMove", {ServoName: getServoID(servoName), Position: position});
+		send("ServoMove", {ServoID: getServoID(servoName), Position: position});
 	};
 	
 	ext.servoMoveAll = function(servo1Pos, servo2Pos, servo3Pos, servo4Pos, servo5Pos) {
@@ -135,7 +135,7 @@
 	};
 	
 	ext.servoOff = function(servoName) {
-		send("ServoOff", {ServoName: getServoID(servoName)});
+		send("ServoOff", {ServoID: getServoID(servoName)});
 	};
 	
 	ext.moveWait = function(callback) {
