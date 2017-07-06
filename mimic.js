@@ -144,10 +144,10 @@
     var descriptor = {
         blocks: [
 		  [' ', 'playback %m.recordings', 'playback'],
-		  [' ', 'move x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
+		  [' ', 'move to x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
 		  [' ', 'move shoulder:%n upper arm:%n forearm:%n hand:%n gripper:%n', 'servoMoveAll', 0, 0, 0, 0, 0],
 		  [' ', 'move %m.servoName to position %n', 'servoMove', 'gripper', 0],
-		  ['w', 'wait until playback or move is done', 'moveWait'],
+		  ['w', 'wait until done', 'moveWait'],
 		  [' ', 'move settings speed:%n ease in:%n ease out:%n %m.sync', 'moveSettings', 50, 0, 0, 'synchronized'],
 		  [' ', 'position %m.servoName at %n', 'servoPosition', 'gripper', 0],
 		  [' ', 'servos stop', 'servosStop'],
