@@ -52,10 +52,7 @@
 		var options = {
             url: url,
             dataType: 'jsonp',
-            timeout : 2000,
-			error: function(){
-				throw 'there has been an error';
-			}
+            timeout : 2000
         };
 		if (ajaxOptions != null)
 			$.extend(options, ajaxOptions);
