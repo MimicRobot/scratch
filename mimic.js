@@ -161,36 +161,15 @@
 	};
 	
 	ext.isMoving = function(callback) {
-		send("IsMoving").then(function(data){
-			//sucess
-			if (data === true)
-				callback(true);
-			else
-				callback(false);
-		}, function(){
-			//failed
-			callback(false);
-		});
+		send("IsMoving").then(callback);
 	};
 	
 	ext.isLongButton = function(callback) {
-		send("IsButtonPressLong").then(function(data){
-			//sucess
-			callback(data);
-		}, function(){
-			//failed
-			callback(false);
-		});
+		send("IsButtonPressLong").then(callback);
 	};
 	
 	ext.getButtonPressCount = function(callback) {
-		send("GetButtonPressCount").then(function(data){
-			//sucess
-			callback(data);
-		}, function(){
-			//failed
-			callback(0);
-		});
+		send("GetButtonPressCount").then(callback);
 	};
 	
 	ext.resetButtonPressCount = function(servoName) {
