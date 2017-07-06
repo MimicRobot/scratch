@@ -172,6 +172,47 @@
 			callback(false);
 		});
 	};
+	
+	ext.isLongButton = function(callback) {
+		send("IsButtonPressLong").then(function(data){
+			//sucess
+			if (data === true)
+				callback(true);
+			else
+				callback(false);
+		}, function(){
+			//failed
+			callback(false);
+		});
+	};
+	
+	ext.getButtonPressCount = function(callback) {
+		send("GetButtonPressCount").then(function(data){
+			//sucess
+			callback(data);
+		}, function(){
+			//failed
+			callback(0);
+		});
+	};
+	
+	ext.resetButtonPressCount = function(servoName) {
+		send("ResetButtonPressCount");
+	};
+	
+	ext.setKnobPosition = function(position, minRange, maxRange) {
+		send("SetKnobPosition", {Position: position, MinRange: minRange, MaxRange: maxRange});
+	};
+	
+	ext.getKnobPosition = function(callback) {
+		send("GetKnobPosition").then(function(data){
+			//sucess
+			callback(data);
+		}, function(){
+			//failed
+			callback(0);
+		});
+	};
 
     var descriptor = {
         blocks: [
@@ -190,7 +231,12 @@
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
 		  ['h', 'when button pressed', 'buttonPressed'],
+		  ['b', 'is long button press', 'isLongButton'],
+		  ['r', 'button press count', 'getButtonPressCount'],
+		  [' ', 'reset button press count', 'resetButtonPressCount'],
 		  ['h', 'when knob turned', 'knobTurned'],
+		  [' ', 'set knob position:%n min:%n max:%n', 'servoMove', 0, -100, 100],
+		  ['r', 'knob position', 'getKnobPosition'],
         ],
 		menus: {
 			servoName: ['shoulder', 'upper arm', 'forearm', 'hand', 'gripper'],
