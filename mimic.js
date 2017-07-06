@@ -201,7 +201,7 @@
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
 		  ['h', 'when button pressed', 'buttonPressed'],
-		  ['R', 'was a long button press', 'isLongButton'],
+		  ['R', 'was a long button pressed', 'isLongButton'],
 		  ['R', 'button press count', 'getButtonPressCount'],
 		  [' ', 'reset button press count', 'resetButtonPressCount'],
 		  ['h', 'when knob turned', 'knobTurned'],
