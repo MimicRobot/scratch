@@ -84,6 +84,7 @@
     };
 	
 	ext.failedConnection = function() {
+		register();
 		return "Verify that the scratch module within the Mimic software is activated and running";
 	};
 
