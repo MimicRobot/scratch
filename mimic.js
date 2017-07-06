@@ -176,10 +176,7 @@
 	ext.isLongButton = function(callback) {
 		send("IsButtonPressLong").then(function(data){
 			//sucess
-			if (data === true)
-				callback(true);
-			else
-				callback(false);
+			callback(data);
 		}, function(){
 			//failed
 			callback(false);
@@ -205,13 +202,7 @@
 	};
 	
 	ext.getKnobPosition = function(callback) {
-		send("GetKnobPosition").then(function(data){
-			//sucess
-			callback(data);
-		}, function(){
-			//failed
-			callback(0);
-		});
+		send("GetKnobPosition").then(callback);
 	};
 
     var descriptor = {
@@ -231,11 +222,11 @@
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
 		  ['h', 'when button pressed', 'buttonPressed'],
-		  ['b', 'is long button press', 'isLongButton'],
+		  ['b', 'was a long button press', 'isLongButton'],
 		  ['R', 'button press count', 'getButtonPressCount'],
 		  [' ', 'reset button press count', 'resetButtonPressCount'],
 		  ['h', 'when knob turned', 'knobTurned'],
-		  [' ', 'set knob position:%n min:%n max:%n', 'servoMove', 0, -100, 100],
+		  [' ', 'set knob position:%n min:%n max:%n', 'setKnobPosition', 0, -100, 100],
 		  ['R', 'knob position', 'getKnobPosition'],
         ],
 		menus: {
