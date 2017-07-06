@@ -232,11 +232,11 @@
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
 		  ['h', 'when button pressed', 'buttonPressed'],
 		  ['b', 'is long button press', 'isLongButton'],
-		  ['r', 'button press count', 'getButtonPressCount'],
+		  ['R', 'button press count', 'getButtonPressCount'],
 		  [' ', 'reset button press count', 'resetButtonPressCount'],
 		  ['h', 'when knob turned', 'knobTurned'],
 		  [' ', 'set knob position:%n min:%n max:%n', 'servoMove', 0, -100, 100],
-		  ['r', 'knob position', 'getKnobPosition'],
+		  ['R', 'knob position', 'getKnobPosition'],
         ],
 		menus: {
 			servoName: ['shoulder', 'upper arm', 'forearm', 'hand', 'gripper'],
