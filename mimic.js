@@ -103,7 +103,14 @@
 	};
 	
 	ext.playback = function(recording) {
-		send("Playback", {Recording: recording});
+		//refresh the list
+		if (recording === '<refresh>'){
+			register();
+		}
+		
+		//begin playback
+		else
+			send("Playback", {Recording: recording});
 	};
 	
 	ext.servosStop = function() {
@@ -215,15 +222,24 @@
         url: 'https://mimicrobot.github.io/scratch/'
     };
 	
-	send("GetRecordings").then(function(data){
-		//success
-		descriptor.menus.recordings = data;
-		ScratchExtensions.register('Mimic robot arm', descriptor, ext);
-		listenForEvents();
-	}, function(){
-		//failed
-		ScratchExtensions.register('Mimic robot arm', {blocks: [['r', 'failed to connect to your robot arm', 'failedConnection']]}, ext);
-	});
+	register = function(){
+		//unregister old
+		ScratchExtensions.unregister('Mimic robot arm');
+		
+		//register new
+		send("GetRecordings").then(function(data){
+			//success
+			if (data != null)
+				data.push('<refresh>')
+			descriptor.menus.recordings = data;
+			ScratchExtensions.register('Mimic robot arm', descriptor, ext);
+			listenForEvents();
+		}, function(){
+			//failed
+			ScratchExtensions.register('Mimic robot arm', {blocks: [['r', 'failed to connect to your robot arm', 'failedConnection']]}, ext);
+		});
+	};
+	register();
 	
 
 })({});
