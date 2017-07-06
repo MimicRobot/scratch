@@ -34,7 +34,6 @@
 		window.setTimeout(function() { listenForEvents(); }, 500); //every .5 sec
 	}
 	
-	
 	send = function (cmd, params, ajaxOptions) {
 		
 		//generate url
@@ -58,6 +57,26 @@
 		if (ajaxOptions != null)
 			$.extend(options, ajaxOptions);
 		return $.ajax(options);
+	};
+	
+	getServoID = function(servoName)
+	{
+		switch (servoName)
+		{
+			case "shoulder": return 1;
+			case "upper arm": return 2;
+			case "forearm": return 3;
+			case "hand": return 4;
+			case "gripper": return 5;
+			default: return 1;
+		}
+	};
+	
+	getSynchronized = function(sync)
+	{
+		if (sync === "synchronized")
+			return true;
+		return false;
 	};
 
     ext._getStatus = function () {
@@ -96,11 +115,11 @@
 	};
 	
 	ext.servoPosition = function(servoName, position) {
-		send("ServoPosition", {ServoName: servoID, Position: position});
+		send("ServoPosition", {ServoName: getServoID(servoName), Position: position});
 	};
 	
 	ext.servoMove = function(servoName, position) {
-		send("ServoMove", {ServoName: servoName, Position: position});
+		send("ServoMove", {ServoName: getServoID(servoName), Position: position});
 	};
 	
 	ext.servoMoveAll = function(servo1Pos, servo2Pos, servo3Pos, servo4Pos, servo5Pos) {
@@ -112,11 +131,11 @@
 	};
 	
 	ext.moveSettings = function(speed, easeIn, easeOut, sync) {
-		send("MoveSettings", {Speed: speed, EaseIn: easeIn, EaseOut: easeOut, Sync: sync});
+		send("MoveSettings", {Speed: speed, EaseIn: easeIn, EaseOut: easeOut, Sync: getSynchronized(sync)});
 	};
 	
 	ext.servoOff = function(servoName) {
-		send("ServoOff", {ServoName: servoName});
+		send("ServoOff", {ServoName: getServoID(servoName)});
 	};
 	
 	ext.moveWait = function(callback) {
