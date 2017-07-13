@@ -202,7 +202,7 @@
 		  [' ', 'move settings speed:%n ease in:%n ease out:%n %m.sync', 'moveSettings', 50, 0, 0, 'synchronized'],
 		  ['R', 'is moving', 'isMoving'],
 		  [' ', 'position %m.servoName at %n', 'servoPosition', 'gripper', 0],
-		  [' ', 'servos stop', 'servosStop'],
+		  [' ', 'stop moving', 'servosStop'],
 		  [' ', 'servos off', 'servosOff'],
 		  [' ', 'servo %m.servoName off', 'servoOff', 'gripper'],
 		  [' ', 'led on  red:%n green:%n blue:%n', 'ledOn', 255, 255, 255],
