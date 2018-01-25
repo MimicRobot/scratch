@@ -160,7 +160,6 @@
 	};
 	
 	ext.knobTurned = function(servoID) {
-		_enableKnobTurnedEvent = true;
 		if (_isKnobTurned === true){
 			_isKnobTurned = false;
 			return true;
@@ -192,11 +191,29 @@
 		send("GetKnobPosition").then(callback);
 	};
 
-	_testValue = 0;
-	ext.getTestValue = function () {
-		_testValue = _testValue + 1;
-		return _testValue
+	_knobPosition = 0;
+	ext.getKnobPosition2 = function () {
+		return _knobPosition;
 	};
+
+	_startListeningForKnobEvent = false;
+	startListenForKnobEvent = function () {
+
+		//run once
+		if (_startListeningForKnobEvent)
+			return;
+		_startListeningForKnobEvent = true;
+
+		listenForKnobEvent = function () {
+			send("AwaitKnobTurned", null, { timeout: 60000 }).done(function (data) {
+				_knobPosition = data; //update value
+				_isKnobTurned = true; // trigger event
+			}).always(function () {
+				listenForKnobEvent(); //repeat
+			});
+		};
+		listenForKnobEvent();
+	}
 
     var descriptor = {
         blocks: [
@@ -221,7 +238,7 @@
 		  ['h', 'when knob turned', 'knobTurned'],
 		  [' ', 'set knob position:%n min:%n max:%n', 'setKnobPosition', 0, -100, 100],
 		  ['R', 'knob position', 'getKnobPosition'],
-		  ['r', 'test value', 'getTestValue'],
+		  ['r', 'knob position2', 'getKnobPosition2'],
         ],
 		menus: {
 			servoName: ['shoulder', 'upper arm', 'forearm', 'hand', 'gripper'],
@@ -242,6 +259,7 @@
 			descriptor.menus.recordings = data;
 			ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 			listenForEvents();
+			startListenForKnobEvent();
 		}, function(){
 			//failed
 			ScratchExtensions.register('Mimic robot arm', {blocks: [['r', 'failed to connect - refresh', 'failedConnection']]}, ext);
