@@ -192,6 +192,12 @@
 		send("GetKnobPosition").then(callback);
 	};
 
+	_testValue = 0;
+	ext.getTestValue = function () {
+		_testValue = _testValue + 1;
+		return _testValue
+	};
+
     var descriptor = {
         blocks: [
 		  [' ', 'playback %m.recordings', 'playback'],
@@ -215,6 +221,7 @@
 		  ['h', 'when knob turned', 'knobTurned'],
 		  [' ', 'set knob position:%n min:%n max:%n', 'setKnobPosition', 0, -100, 100],
 		  ['R', 'knob position', 'getKnobPosition'],
+		  ['r', 'test value', 'getTestValue'],
         ],
 		menus: {
 			servoName: ['shoulder', 'upper arm', 'forearm', 'hand', 'gripper'],
