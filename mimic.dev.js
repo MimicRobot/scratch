@@ -22,7 +22,6 @@
 	_yPos = 0;
 	_zPos = 0;
 	_isPositionChanged = false;
-	_isTargetChanged = false;
 	
 	send = function (cmd, params, ajaxOptions) {
 		
@@ -168,14 +167,6 @@
 		return false;
 	};
 
-	ext.targetChanged = function () {
-		if (_isTargetChanged === true) {
-			_isTargetChanged = false;
-			return true;
-		}
-		return false;
-	};
-
 	ext.isMoving = function(callback) {
 		send("IsMoving").then(callback);
 	};
@@ -248,14 +239,10 @@
 					_forearmPos = data.Position.Forearm || 0;
 					_handPos = data.Position.Hand || 0;
 					_gripperPos = data.Position.Gripper || 0;
+					_xPos = data.Position.X || 0;
+					_yPos = data.Position.Y || 0;
+					_zPos = data.Position.Z || 0;
 					_isPositionChanged = true;
-				}
-				//Target
-				else if (typeof data.Target !== 'undefined') {
-					_xPos = data.Target.X || 0;
-					_yPos = data.Target.Y || 0;
-					_zPos = data.Target.Z || 0;
-					_isTargetChanged = true;
 				}
 				//knob
 				else if (typeof data.Knob !== 'undefined') {
@@ -291,12 +278,11 @@
 		  [' ', 'servos off', 'servosOff'],
 		  [' ', 'servo %m.servoName off', 'servoOff', 'gripper'],
 		  ['h', 'when postion changed', 'positionChanged'],
-		  ['r', 'shoulder position', 'shoulderPos'],
-		  ['r', 'upper arm position', 'upperArmPos'],
-		  ['r', 'forearm position', 'forearmPos'],
-		  ['r', 'hand position', 'handPos'],
-		  ['r', 'gripper position', 'gripperPos'],
-		  ['h', 'when target changed', 'targetChanged'],
+		  ['r', 'shoulder', 'shoulderPos'],
+		  ['r', 'upper arm', 'upperArmPos'],
+		  ['r', 'forearm', 'forearmPos'],
+		  ['r', 'hand', 'handPos'],
+		  ['r', 'gripper', 'gripperPos'],
 		  ['r', 'x', 'xPos'],
 		  ['r', 'y', 'yPos'],
 		  ['r', 'z', 'zPos'],
