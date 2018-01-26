@@ -13,6 +13,16 @@
 	_knobPosition = 0;
 	_isLongButton = false;
 	_buttonPressCount = 0;
+	_shoulderPos = 0;
+	_upperArmPos = 0;
+	_forearmPos = 0;
+	_handPos = 0;
+	_gripperPos = 0;
+	_xPos = 0;
+	_yPos = 0;
+	_zPos = 0;
+	_isPositionChanged = false;
+	_isTargetChanged = false;
 	
 	send = function (cmd, params, ajaxOptions) {
 		
@@ -129,6 +139,10 @@
 	ext.moveWait = function(callback) {
 		send("MoveWait", null, {timeout:60000}).always(callback);
 	};
+
+	ext.targetOffset = function (x, y, z) {
+		send("TargetOffset", { X: x, Y: y, Z: z });
+	};
 	
 	ext.buttonPressed = function() {
 		if (_isButtonPressed === true){
@@ -145,7 +159,23 @@
 		}
 		return false;
 	};
-	
+
+	ext.positionChanged = function () {
+		if (_isPositionChanged === true) {
+			_isPositionChanged = false;
+			return true;
+		}
+		return false;
+	};
+
+	ext.targetChanged = function () {
+		if (_isTargetChanged === true) {
+			_isTargetChanged = false;
+			return true;
+		}
+		return false;
+	};
+
 	ext.isMoving = function(callback) {
 		send("IsMoving").then(callback);
 	};
@@ -170,6 +200,38 @@
 		return _knobPosition;
 	};
 
+	ext.shoulderPos = function () {
+		return _shoulderPos;
+	};
+
+	ext.upperArmPos = function () {
+		return _upperArmPos;
+	};
+
+	ext.forearmPos = function () {
+		return _forearmPos;
+	};
+
+	ext.handPos = function () {
+		return _handPos;
+	};
+
+	ext.gripperPos = function () {
+		return _gripperPos;
+	};
+
+	ext.xPos = function () {
+		return _xPos;
+	};
+
+	ext.yPos = function () {
+		return _yPos;
+	};
+
+	ext.zPos = function () {
+		return _zPos;
+	};
+
 	listenForEvents = function () {
 
 		//run once
@@ -179,12 +241,29 @@
 
 		events = function () {
 			send("AwaitEvent", null, { timeout: 600000 }).done(function (data) {
+				//Position
+				if (typeof data.Position !== 'undefined') {
+					_shoulderPos = data.Position.Shoulder || 0;
+					_upperArmPos = data.Position.UpperArm || 0;
+					_forearmPos = data.Position.Forearm || 0;
+					_handPos = data.Position.Hand || 0;
+					_gripperPos = data.Position.Gripper || 0;
+					_isPositionChanged = true;
+				}
+				//Target
+				else if (typeof data.Target !== 'undefined') {
+					_xPos = data.Target.X || 0;
+					_yPos = data.Target.Y || 0;
+					_zPos = data.Target.Z || 0;
+					_isTargetChanged = true;
+				}
 				//knob
-				if (typeof data.Knob !== 'undefined') {
+				else if (typeof data.Knob !== 'undefined') {
 					_knobPosition = data.Knob;
 					_isKnobTurned = true;
-					//button
-				} else if (typeof data.Button !== 'undefined') {
+				}
+				//button
+				else if (typeof data.Button !== 'undefined') {
 					_buttonPressCount = data.Button.Count;
 					_isLongButton = data.Button.WasLong;
 					_isButtonPressed = true;
@@ -211,6 +290,17 @@
 		  [' ', 'stop moving', 'servosStop'],
 		  [' ', 'servos off', 'servosOff'],
 		  [' ', 'servo %m.servoName off', 'servoOff', 'gripper'],
+		  ['h', 'when postion changed', 'positionChanged']
+		  ['r', 'shoulder position', 'shoulderPos'],
+		  ['r', 'upper arm position', 'upperArmPos'],
+		  ['r', 'forearm position', 'forearmPos'],
+		  ['r', 'hand position', 'handPos'],
+		  ['r', 'gripper position', 'gripperPos'],
+		  ['h', 'when target changed', 'targetChanged']
+		  ['r', 'x', 'xPos'],
+		  ['r', 'y', 'yPos'],
+		  ['r', 'z', 'zPos'],
+		  [' ', 'set target offset to x:%n y:%n z:%n', 'targetOffset', 0, 0, 0],
 		  [' ', 'led on  red:%n green:%n blue:%n', 'ledOn', 255, 255, 255],
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
