@@ -183,14 +183,16 @@
 				if (typeof data.Knob !== 'undefined') {
 					_knobPosition = data.Knob;
 					_isKnobTurned = true;
-				//button
+					//button
 				} else if (typeof data.Button !== 'undefined') {
 					_buttonPressCount = data.Button.Count;
 					_isLongButton = data.Button.WasLong;
 					_isButtonPressed = true;
 				}
-			}).always(function () {
 				events(); //loop
+
+			}).fail(function () { 
+				window.setTimeout(function () { events(); }, 10000); //retry in 10 sec
 			});
 		};
 		events();
