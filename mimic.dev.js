@@ -257,7 +257,9 @@
 				}
 				events(); //loop
 
-			}).fail(function () { 
+			}).always(function () {
+				//bug fix: needed, otherwise fail doesn't get called
+			}).fail(function (a,b,c) { 
 				window.setTimeout(function () { events(); }, 10000); //retry in 10 sec
 			});
 		};
