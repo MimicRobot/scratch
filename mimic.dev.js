@@ -7,32 +7,12 @@
 
 	_self = ext;
 	_baseUrl = "http://localhost:8080/mimic/api/";
-	_enableButtonPressedEvent = false;
 	_isButtonPressed = false;
-	_enableKnobTurnedEvent = false;
 	_isKnobTurned = false;
-	
-	listenForEvents = function()
-	{
-		if (_enableButtonPressedEvent == true)
-		{
-			send("ButtonPressed").then(function(data){
-				if (data === true)
-					_isButtonPressed = true;
-			});
-		}
-		
-		if (_enableKnobTurnedEvent == true)
-		{
-			send("KnobTurned").then(function(data){
-				if (data === true)
-					_isKnobTurned = true;
-			});
-		}
-		
-		//run again
-		window.setTimeout(function() { listenForEvents(); }, 500); //every .5 sec
-	}
+	_listeningForEvents = false;
+	_knobPosition = 0;
+	_isLongButton = false;
+	_buttonPressCount = 0;
 	
 	send = function (cmd, params, ajaxOptions) {
 		
@@ -150,8 +130,7 @@
 		send("MoveWait", null, {timeout:60000}).always(callback);
 	};
 	
-	ext.buttonPressed = function(servoID) {
-		_enableButtonPressedEvent = true;
+	ext.buttonPressed = function() {
 		if (_isButtonPressed === true){
 			_isButtonPressed = false;
 			return true;
@@ -159,7 +138,7 @@
 		return false;
 	};
 	
-	ext.knobTurned = function(servoID) {
+	ext.knobTurned = function() {
 		if (_isKnobTurned === true){
 			_isKnobTurned = false;
 			return true;
@@ -172,11 +151,11 @@
 	};
 	
 	ext.isLongButton = function(callback) {
-		send("IsButtonPressLong").then(callback);
+		return _isLongButton;
 	};
 	
 	ext.getButtonPressCount = function(callback) {
-		send("GetButtonPressCount").then(callback);
+		return _buttonPressCount;
 	};
 	
 	ext.resetButtonPressCount = function(servoName) {
@@ -186,33 +165,35 @@
 	ext.setKnobPosition = function(position, minRange, maxRange) {
 		send("SetKnobPosition", {Position: position, MinRange: minRange, MaxRange: maxRange});
 	};
-	
-	ext.getKnobPosition = function(callback) {
-		send("GetKnobPosition").then(callback);
-	};
 
-	_knobPosition = 0;
-	ext.getKnobPosition2 = function () {
+	ext.getKnobPosition = function () {
 		return _knobPosition;
 	};
 
-	_startListeningForKnobEvent = false;
-	startListenForKnobEvent = function () {
+	listenForEvents = function () {
 
 		//run once
-		if (_startListeningForKnobEvent)
+		if (_listeningForEvents)
 			return;
-		_startListeningForKnobEvent = true;
+		_listeningForEvents = true;
 
-		listenForKnobEvent = function () {
-			send("AwaitKnobTurned", null, { timeout: 60000 }).done(function (data) {
-				_knobPosition = data; //update value
-				_isKnobTurned = true; // trigger event
+		events = function () {
+			send("AwaitEvent", null, { timeout: 600000 }).done(function (data) {
+				//knob
+				if (data.Knob) {
+					_knobPosition = data.Knob;
+					_isKnobTurned = true;
+				//button
+				} else if (data.Button) {
+					_buttonPressCount = data.Button.Count;
+					_isLongButton = data.Button.WasLong;
+					_isButtonPressed = true;
+				}
 			}).always(function () {
-				listenForKnobEvent(); //repeat
+				events(); //loop
 			});
 		};
-		listenForKnobEvent();
+		events();
 	}
 
     var descriptor = {
@@ -232,13 +213,12 @@
 		  [' ', 'led off', 'ledOff'],
           ['w', 'play %s', 'play', 'C,E-16,R,C5-2'],
 		  ['h', 'when button pressed', 'buttonPressed'],
-		  ['R', 'was a long button pressed', 'isLongButton'],
-		  ['R', 'button press count', 'getButtonPressCount'],
+		  ['r', 'was a long button pressed', 'isLongButton'],
+		  ['r', 'button press count', 'getButtonPressCount'],
 		  [' ', 'reset button press count', 'resetButtonPressCount'],
 		  ['h', 'when knob turned', 'knobTurned'],
 		  [' ', 'set knob position:%n min:%n max:%n', 'setKnobPosition', 0, -100, 100],
-		  ['R', 'knob position', 'getKnobPosition'],
-		  ['r', 'knob position2', 'getKnobPosition2'],
+		  ['r', 'knob position', 'getKnobPosition'],
         ],
 		menus: {
 			servoName: ['shoulder', 'upper arm', 'forearm', 'hand', 'gripper'],
@@ -259,7 +239,6 @@
 			descriptor.menus.recordings = data;
 			ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 			listenForEvents();
-			startListenForKnobEvent();
 		}, function(){
 			//failed
 			ScratchExtensions.register('Mimic robot arm', {blocks: [['r', 'failed to connect - refresh', 'failedConnection']]}, ext);
