@@ -180,11 +180,11 @@
 		events = function () {
 			send("AwaitEvent", null, { timeout: 600000 }).done(function (data) {
 				//knob
-				if (data.Knob) {
+				if (typeof data.Knob !== 'undefined') {
 					_knobPosition = data.Knob;
 					_isKnobTurned = true;
 				//button
-				} else if (data.Button) {
+				} else if (typeof data.Button !== 'undefined') {
 					_buttonPressCount = data.Button.Count;
 					_isLongButton = data.Button.WasLong;
 					_isButtonPressed = true;
