@@ -290,13 +290,13 @@
 		  [' ', 'stop moving', 'servosStop'],
 		  [' ', 'servos off', 'servosOff'],
 		  [' ', 'servo %m.servoName off', 'servoOff', 'gripper'],
-		  ['h', 'when postion changed', 'positionChanged']
+		  ['h', 'when postion changed', 'positionChanged'],
 		  ['r', 'shoulder position', 'shoulderPos'],
 		  ['r', 'upper arm position', 'upperArmPos'],
 		  ['r', 'forearm position', 'forearmPos'],
 		  ['r', 'hand position', 'handPos'],
 		  ['r', 'gripper position', 'gripperPos'],
-		  ['h', 'when target changed', 'targetChanged']
+		  ['h', 'when target changed', 'targetChanged'],
 		  ['r', 'x', 'xPos'],
 		  ['r', 'y', 'yPos'],
 		  ['r', 'z', 'zPos'],
