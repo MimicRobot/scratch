@@ -266,7 +266,7 @@
 
     var descriptor = {
         blocks: [
-		  [' ', 'playback %m.recordings', 'playback'],
+		  [' ', 'playback %m.recordings', 'playback', '<refresh>'],
 		  [' ', 'move to x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
 		  [' ', 'move shoulder:%n upper arm:%n forearm:%n hand:%n gripper:%n', 'servoMoveAll', 0, 0, 0, 0, 0],
 		  [' ', 'move %m.servoName to position %n', 'servoMove', 'gripper', 0],
