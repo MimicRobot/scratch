@@ -22,6 +22,7 @@
 	_yPos = 0;
 	_zPos = 0;
 	_isPositionChanged = false;
+	_isConnected = false;
 	
 	send = function (cmd, params, ajaxOptions) {
 		
@@ -136,7 +137,7 @@
 	};
 	
 	ext.moveWait = function(callback) {
-		send("MoveWait", null, {timeout:60000}).always(callback);
+		send("MoveWait", null, {timeout:120000}).always(callback);
 	};
 
 	ext.targetOffset = function (x, y, z) {
@@ -230,8 +231,9 @@
 			return;
 		_listeningForEvents = true;
 
+		//start listening for events
 		events = function () {
-			send("AwaitEvent", null, { timeout: 600000 }).done(function (data) {
+			send("AwaitEvent", null, { timeout: 3600000 }).then(function (data) {
 				//Position
 				if (typeof data.Position !== 'undefined') {
 					_shoulderPos = data.Position.Shoulder || 0;
@@ -256,14 +258,29 @@
 					_isButtonPressed = true;
 				}
 				events(); //loop
-
-			}).always(function () {
-				//bug fix: needed, otherwise fail doesn't get called
-			}).fail(function (a,b,c) { 
-				window.setTimeout(function () { events(); }, 10000); //retry in 10 sec
 			});
+
 		};
 		events();
+
+		//start heartbeat to reconnect events
+		heartbeat = function () {
+			send("Connected", null, { timeout: 4000 }).then(function (data) { //timeout in 4 seconds
+				//success
+				if (!_isConnected){
+					_isConnected = true;
+					//reconnect events
+					events();
+				}
+				window.setTimeout(function () { heartbeat(); }, 5000); //retry in 5 sec
+			}, function (a, b, c, d) {
+				//failed
+				_isConnected = false;
+				window.setTimeout(function () { heartbeat(); }, 5000); //retry in 5 sec
+			});
+		};
+		_isConnected = true;
+		heartbeat();
 	}
 
     var descriptor = {
@@ -319,12 +336,12 @@
 			descriptor.menus.recordings = data;
 			ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 			listenForEvents();
-		}, function(){
+		}, function(a,b,c,d){
 			//failed
 			ScratchExtensions.register('Mimic robot arm', {blocks: [['r', 'failed to connect - refresh', 'failedConnection']]}, ext);
 		});
 	};
+
 	register();
-	
 
 })({});
