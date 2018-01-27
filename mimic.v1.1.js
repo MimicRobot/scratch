@@ -94,11 +94,6 @@
 	};
 	
 	ext.playback = function(recording) {
-		//refresh the list
-		if (recording === '<refresh>'){
-			register();
-		}
-		
 		//begin playback
 		else
 			send("Playback", {Recording: recording});
@@ -276,6 +271,7 @@
 					_isConnected = true;
 					//reconnect events
 					events();
+					register(); //reload recordings
 				}
 				window.setTimeout(function () { heartbeat(); }, 5000); //retry in 5 sec
 			}, function (a, b, c, d) {
@@ -290,7 +286,7 @@
 
     var descriptor = {
         blocks: [
-		  [' ', 'playback %m.recordings', 'playback', '<refresh>'],
+		  [' ', 'playback %m.recordings', 'playback'],
 		  [' ', 'move to x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
 		  [' ', 'move shoulder:%n upper arm:%n forearm:%n hand:%n gripper:%n', 'servoMoveAll', 0, 0, 0, 0, 0],
 		  [' ', 'move %m.servoName to position %n', 'servoMove', 'gripper', 0],
