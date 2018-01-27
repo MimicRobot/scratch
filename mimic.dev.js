@@ -95,8 +95,7 @@
 	
 	ext.playback = function(recording) {
 		//begin playback
-		else
-			send("Playback", {Recording: recording});
+		send("Playback", {Recording: recording});
 	};
 	
 	ext.servosStop = function() {
