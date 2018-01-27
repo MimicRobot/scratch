@@ -331,8 +331,6 @@
 		//register new
 		send("GetRecordings").then(function(data){
 			//success
-			if (data != null)
-				data.push('<refresh>')
 			descriptor.menus.recordings = data;
 			ScratchExtensions.register('Mimic robot arm', descriptor, ext);
 			listenForEvents();
