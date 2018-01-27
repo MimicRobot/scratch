@@ -257,6 +257,11 @@
 					_isLongButton = data.Button.WasLong;
 					_isButtonPressed = true;
 				}
+				//Recordings Changed
+				else if (typeof data.RecordingsChanged !== 'undefined') {
+					//refresh the list
+					register();
+				}
 				events(); //loop
 			});
 
