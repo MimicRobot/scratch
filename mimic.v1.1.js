@@ -326,17 +326,17 @@
 	
 	register = function(){
 		//unregister old
-		ScratchExtensions.unregister('Mimic robot arm');
+		ScratchExtensions.unregister('mimic');
 		
 		//register new
 		send("GetRecordings").then(function(data){
 			//success
 			descriptor.menus.recordings = data;
-			ScratchExtensions.register('Mimic robot arm', descriptor, ext);
+			ScratchExtensions.register('mimic', descriptor, ext);
 			listenForEvents();
 		}, function(a,b,c,d){
 			//failed
-			ScratchExtensions.register('Mimic robot arm', {blocks: [['r', 'failed to connect - refresh', 'failedConnection']]}, ext);
+			ScratchExtensions.register('mimic', {blocks: [['r', 'failed to connect - refresh', 'failedConnection']]}, ext);
 		});
 	};
 
