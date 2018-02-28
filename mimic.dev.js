@@ -266,6 +266,7 @@
 	};
 
 	ext.listenForWait = function (choices, callback) {
+		_isListening = true;
 		send("ListenForWait", { Choices: choices }, { timeout: 120000 }).always(function (result) {
 			_isListening = false;
 			callback();
@@ -399,8 +400,8 @@
 			[' ', 'change voice to %m.voice', 'changeVoice', 'male'],
 			['r', 'is speaking', 'isSpeaking'],
 			['h', 'when heard %s', 'whenHeard', 'red'],
-			['w', 'listen for %s', 'listenFor', 'red, green, blue'],
-			['w', 'listen for %s and wait', 'listenForWait', 'red, green, blue'],
+			['w', 'listen continually for %s', 'listenFor', 'red, green, blue'],
+			['w', 'listen once for %s and wait', 'listenForWait', 'red, green, blue'],
 			[' ', 'stop listening', 'stopListening'],
 			['r', 'last heard', 'lastHeard'],
 			['r', 'is listening', 'isListening'],
