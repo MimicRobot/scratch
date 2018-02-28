@@ -24,6 +24,7 @@
 	_isPositionChanged = false;
 	_isSpeaking = false;
 	_lastHeard = "";
+	_lastHeardChanged = false;
 	_isListening = false;
 	_isConnected = false;
 
@@ -219,19 +220,29 @@
 	};
 
 	ext.speak = function (text, callback) {
-		send("Speak", { Text: text }).then(callback);
+		_isSpeaking = true;
+		send("Speak", { Text: text }).always(function (result) {
+			_isSpeaking = result === true;
+			callback();
+		});
 	};
 
 	ext.speakWait = function (text, callback) {
-		send("SpeakWait", { Text: text }, { timeout: 6000 }).always(callback);
+		_isSpeaking = true;
+		send("SpeakWait", { Text: text }, { timeout: 6000 }).always(function (result) {
+			_isSpeaking = false;
+			callback();
+		});
 	};
 
 	ext.stopSpeaking = function () {
 		send("StopSpeaking");
+		_isSpeaking = false;
 	};
 
 	ext.changeVoice = function (voice) {
 		send("ChangeVoice", { Male: voice === 'male' })
+		_isSpeaking = false;
 	};
 
 	ext.isSpeaking = function () {
@@ -239,19 +250,31 @@
 	};
 
 	ext.whenHeard = function (choice) {
+		if (_lastHeardChanged === true && _lastHeard === choice) {
+			_lastHeardChanged = false;
+			return true;
+		}
 		return false;
 	};
 
 	ext.listenFor = function (choices, callback) {
-		send("ListenFor", { Choices: choices }).always(callback);
+		_isListening = true;
+		send("ListenFor", { Choices: choices }).always(function (result) {
+			_isListening = result === true;
+			callback();
+		});
 	};
 
 	ext.listenForWait = function (choices, callback) {
-		send("ListenForWait", { Choices: choices }, { timeout: 120000 }).always(callback);
+		send("ListenForWait", { Choices: choices }, { timeout: 120000 }).always(function (result) {
+			_isListening = false;
+			callback();
+		});
 	};
 
 	ext.stopListening = function () {
 		send("StopListening");
+		_isListening = false;
 	};
 
 	ext.lastHeard = function () {
@@ -300,15 +323,14 @@
 					//refresh the list
 					register();
 				}
-				//Recordings Changed
+				//Recognized
 				else if (typeof data.Recognized !== 'undefined') {
-					//refresh the list
-					register();
+					_lastHeard = data.Recognized;
+					_lastHeardChanged = true;
 				}
-				//Recordings Changed
+				//Spoken
 				else if (typeof data.Spoken !== 'undefined') {
-					//refresh the list
-					register();
+					_isSpeaking = false;
 				}
 				events(); //loop
 			});
