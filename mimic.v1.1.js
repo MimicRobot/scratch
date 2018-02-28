@@ -93,9 +93,9 @@
 		send("Play", {Notes: notes}, {timeout:6000}).always(callback);
 	};
 	
-	ext.playback = function(recording) {
+	ext.playback = function(recording, startDescription, endDescription) {
 		//begin playback
-		send("Playback", {Recording: recording});
+		send("Playback", {Recording: recording, StartDescription: startDescription, EndDescription: endDescription});
 	};
 	
 	ext.servosStop = function() {
@@ -286,6 +286,7 @@
     var descriptor = {
         blocks: [
 		  [' ', 'playback %m.recordings', 'playback'],
+		  [' ', 'playback %m.recordings from %s to %s', 'playback', null, null],
 		  [' ', 'move to x:%n y:%n z:%n', 'servoMoveTarget', 0, 0, 0],
 		  [' ', 'move shoulder:%n upper arm:%n forearm:%n hand:%n gripper:%n', 'servoMoveAll', 0, 0, 0, 0, 0],
 		  [' ', 'move %m.servoName to position %n', 'servoMove', 'gripper', 0],
